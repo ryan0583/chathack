@@ -9,6 +9,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [sqlLoading, setSqlLoading] = useState(false);
   const [sqlResult, setSqlResult] = useState(null);
+  const [sqlError, setSqlError] = useState('');
 
   const handleError = (e) => {
     console.log(error);
@@ -18,6 +19,7 @@ function App() {
   const getQuery = (e) => {
     e.preventDefault();
     setError('');
+    setSqlError('');
     setResponse('');
     setSqlLoading(false);
     setSqlResult(null);
@@ -25,8 +27,11 @@ function App() {
 
     axios
       .post('http://localhost:8020/chat', { prompt })
-      .then((res) => setResponse(res.data))
-      .catch(handleError)
+      .then((res) => setResponse(`SELECT ${res.data}`))
+      .catch(e => {
+        console.log(e);
+        setError('Something went wrong :(');
+      })
       .finally(() => setLoading(false));
   };
 
@@ -34,13 +39,17 @@ function App() {
     e.preventDefault();
     setSqlLoading(true);
     setSqlResult(null);
+    setSqlError('');
 
     axios
       .post('http://localhost:8020/sql', {
         sql: response,
       })
       .then((res) => setSqlResult(res.data))
-      .catch(handleError)
+      .catch((e) => {
+        console.log(e);
+        setSqlError('Something went wrong :(');
+      })
       .finally(() => setSqlLoading(false));
   };
 
@@ -93,6 +102,7 @@ function App() {
           </tbody>
         </table>
       )}
+      {sqlError}
     </div>
   );
 }

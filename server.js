@@ -42,7 +42,8 @@ app.post('/chat', async (req, res) => {
         ${playerSchema}\n#
         ${teamSchema}\n#
         ${matchSchema}\n#
-        \n### ${prompt}`,
+        \n### ${prompt}\n
+        SELECT`,
     temperature: 0,
     max_tokens: 1000,
     top_p: 1.0,
