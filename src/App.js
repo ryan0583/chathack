@@ -1,23 +1,43 @@
-import logo from './logo.svg';
+import axios from 'axios';
 import './App.css';
+import { useState } from 'react';
 
 function App() {
+  const [prompt, setPrompt] = useState('');
+  const [response, setResponse] = useState('');
+  const [loading, setLoading] = useState(false);
+  const HTTP = 'http://localhost:8020/chat';
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setResponse('');
+    setLoading(true);
+
+    axios
+      .post(`${HTTP}`, { prompt })
+      .then((res) => setResponse(res.data))
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
+  };
+
+  const handlePrompt = (e) => setPrompt(e.target.value);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      className="App"
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}
+    >
+      <textarea
+        style={{ width: '100%', height: '100px' }}
+        type="text"
+        value={prompt}
+        onChange={handlePrompt}
+      />
+      <div style={{ width: '100%', display: 'flex', alignItems: 'flex-start' }}>
+        <button onClick={handleSubmit}>GO!</button>
+      </div>
+      {loading && 'Loading...'}
+      {response}
     </div>
   );
 }
