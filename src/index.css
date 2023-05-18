@@ -6,6 +6,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding: 20px;
+  background-color: darkblue;
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 code {
